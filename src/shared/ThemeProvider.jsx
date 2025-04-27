@@ -28,6 +28,7 @@ export default function ThemeProvider({ children }) {
   useEffect(() => {
     const loadTheme = async () => {
       const savedTheme = await AsyncStorage.getItem("theme");
+      console.log(savedTheme);
       if (savedTheme === "dark") {
         setIsDarkTheme(true);
         updateHtmlClass(true);

@@ -3,7 +3,7 @@ import { View, SafeAreaView, Text, StyleSheet, StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FrontendHeader from "./Header.jsx"; // The header for the app
 import FrontendFooter from "./Footer.jsx"; // Optional footer if needed
-
+import ThemeSwitcher from "../../../shared/ThemeSwitcher.jsx";
 const MasterLayout = ({ children }) => {
   //   console.log(children);
   return (
@@ -12,7 +12,9 @@ const MasterLayout = ({ children }) => {
       <FrontendHeader />
 
       <View style={styles.content}>{children}</View>
+
       <FrontendFooter />
+      <ThemeSwitcher />
     </SafeAreaView>
   );
 };

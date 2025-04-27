@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Navbar from "./Navbar";
@@ -8,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../store/userSlice.js";
 import { useSnackbar } from "../../../shared/SnackbarContext.jsx";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const { width, height } = Dimensions.get("window");
 
 export default function Header() {
   const [userMenuVisible, setUserMenuVisible] = useState(false);
@@ -19,39 +28,23 @@ export default function Header() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        padding: 16,
-        backgroundColor: "black",
-        justifyContent: "space-between",
-      }}
-    >
+    <View style={styles.headerContainer}>
       {/* Left - Logo */}
       <TouchableOpacity
         onPress={() => {
           setUserMenuVisible(false);
           navigation.navigate("Home");
         }}
+        style={styles.logoContainer}
       >
-        <Text style={{ color: "white", fontWeight: "bold", fontSize: 24 }}>
-          {UiMessages.Menu.Home}
-        </Text>
+        <Text style={styles.logoText}>Home</Text>
       </TouchableOpacity>
 
       {/* Middle - Navbar */}
       <Navbar />
 
       {/* Right - Icons */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 16,
-          position: "relative",
-        }}
-      >
+      <View style={styles.rightIconsContainer}>
         <TouchableOpacity>
           <Ionicons name="search" size={24} color="white" />
         </TouchableOpacity>
@@ -63,17 +56,7 @@ export default function Header() {
 
         {/* User Menu Dropdown */}
         {userMenuVisible && (
-          <View
-            style={{
-              position: "absolute",
-              top: 40, // little below the icons
-              right: 40, // adjust it based on your needs
-              backgroundColor: "black",
-              padding: 8,
-              borderRadius: 8,
-              zIndex: 999,
-            }}
-          >
+          <View style={styles.userMenuDropdown}>
             {/* Conditional rendering for logged in/out user */}
             {isAuthenticated ? (
               <>
@@ -83,9 +66,7 @@ export default function Header() {
                     navigation.navigate("MyAccount");
                   }}
                 >
-                  <Text style={{ color: "white", marginVertical: 4 }}>
-                    {UiMessages.Menu.MyAccount}
-                  </Text>
+                  <Text style={styles.menuText}>My Account</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={async () => {
@@ -114,9 +95,7 @@ export default function Header() {
                     }
                   }}
                 >
-                  <Text style={{ color: "white", marginVertical: 4 }}>
-                    {UiMessages.Menu.Logout}
-                  </Text>
+                  <Text style={styles.menuText}>Logout</Text>
                 </TouchableOpacity>
               </>
             ) : (
@@ -127,9 +106,7 @@ export default function Header() {
                     navigation.navigate("Register");
                   }}
                 >
-                  <Text style={{ color: "white", marginVertical: 4 }}>
-                    {UiMessages.Menu.Register}
-                  </Text>
+                  <Text style={styles.menuText}>Register</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -137,15 +114,7 @@ export default function Header() {
                     navigation.navigate("Login");
                   }}
                 >
-                  <Text
-                    style={{
-                      color: "white",
-                      fontWeight: "bold",
-                      marginVertical: 4,
-                    }}
-                  >
-                    {UiMessages.Menu.Login}
-                  </Text>
+                  <Text style={styles.menuText}>Login</Text>
                 </TouchableOpacity>
               </>
             )}
@@ -159,20 +128,64 @@ export default function Header() {
             color="white"
           />
           {/* Cart badge */}
-          <View
-            style={{
-              position: "absolute",
-              top: -6,
-              right: -10,
-              backgroundColor: "white",
-              borderRadius: 8,
-              paddingHorizontal: 4,
-            }}
-          >
-            <Text style={{ fontSize: 10, fontWeight: "bold" }}>1</Text>
+          <View style={styles.cartBadge}>
+            <Text style={styles.cartText}>1</Text>
           </View>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "black",
+    justifyContent: "space-between",
+    width: "100%",
+    height: Platform.OS === "ios" ? 80 : 70, // Adjust height for iOS/Android
+  },
+  logoContainer: {
+    flex: 1,
+  },
+  logoText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 24,
+    marginLeft: 10,
+  },
+  rightIconsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    position: "relative",
+  },
+  userMenuDropdown: {
+    position: "absolute",
+    top: 40, // little below the icons
+    right: 0, // right aligned
+    backgroundColor: "black",
+    padding: 8,
+    borderRadius: 8,
+    zIndex: 999,
+  },
+  menuText: {
+    color: "white",
+    marginVertical: 4,
+    fontSize: 14,
+  },
+  cartBadge: {
+    position: "absolute",
+    top: -6,
+    right: -10,
+    backgroundColor: "white",
+    borderRadius: 8,
+    paddingHorizontal: 4,
+  },
+  cartText: {
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+});
