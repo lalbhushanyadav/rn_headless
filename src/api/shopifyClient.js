@@ -154,8 +154,9 @@ const shopifyClient = {
 
 			return data.customerCreate.customer;
 		} catch (error) {
-			console.error("Error creating customer:", error);
-			throw new Error(error.message || "An error occurred while creating the customer.");
+			// console.error("Error creating customer:", error);
+			return { error: error.message };
+
 		}
 	},
 
