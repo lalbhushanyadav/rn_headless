@@ -10,6 +10,8 @@ import Home from '../app/frontend/pages/Home.jsx';
 import MyAccount from '../app/frontend/pages/MyAccount.jsx';
 import Login from '../app/frontend/pages/Login.jsx';
 import Register from '../app/frontend/pages/Register.jsx';
+import Collections from "../app/frontend/pages/Collections.jsx"
+import Collection from '../app/frontend/pages/Collection.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +68,8 @@ export default function FrontendRoutes() {
 			{/* Public Screens */}
 			<Stack.Screen name="Home" component={Home} />
 			<Stack.Screen name="Register" component={Register} />
+			<Stack.Screen name="Collections" component={Collections} />
+			<Stack.Screen name="Collection" component={Collection} />
 
 			{/* Protected Screens */}
 			<Stack.Screen name="MyAccount" component={MyAccount} />
